@@ -91,40 +91,50 @@ def depthFirstSearch(problem):
 
     from util import Stack 
 
-    print("Start:", problem.getStartState())
-    print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
-    print("Start's successors:", problem.getSuccessors(problem.getStartState()))
-    print("goal: ", problem.goal)           # erase latter
+    print("Start: ", problem.getStartState())
+    print("Is the start a goal? ", problem.isGoalState(problem.getStartState()))
+    print("Start's successors: ", problem.getSuccessors(problem.getStartState()))
+    print("Goal state is: ", problem.goal)           # erase latter
     print("\n")
 
     currentPosition = problem.getStartState()       # on working node: current position of pacman
     visited = []                                    # list of visited nodes
     actions = []                                    # list of actions that pacman will have
+    auxStack = []
+
 
     stack = Stack()
     stack.push(currentPosition)
 
-    successors = problem.getSuccessors(currentPosition)
-    print("successors: ", successors)
-    # node = {["position"],["direction"],["cost"]}
-   
-    for node in successors:
-        stack.push(node[0])     # getting only the position of the node and not other infos
-        print("node {} pushed to stack!".format(node[0]))
+    # successor = {["position"],["direction"],["cost"]}   
+    def pushSuccessores(successors):
+        for successor in successors:
+            if successor[0] not in visited:
+                stack.push(successor[0])                 # getting only the position of the node
+                auxStack.append(successor[0])
+                print("Successor {} pushed to stack!".format(successor[0]))
+
+    def pushActions(successors):
+        for successor in successors:
+            if successor[0] not in visited:
+                actions.append(successor[1])             # getting only the direction of the node
+                print("Action '{}' appended to list actions!".format(successor[1]))
 
     while not stack.isEmpty():
         currentPosition = stack.pop()
-        if currentPosition not in visited:          # verifying if node has already been visited
-            visited.append(currentPosition)
-            
-            successors = problem.getSuccessors(currentPosition)
-
+        print("current position of pacman = ", currentPosition)
         if (problem.isGoalState(currentPosition)):
             break
+        else:
+            if currentPosition not in visited:          # verifying if node has already been visited
+                visited.append(currentPosition)
+                successors = problem.getSuccessors(currentPosition)
+                pushSuccessores(successors)
+                pushActions(successors)
 
-        # TODO: implement actions
 
     print("visited: ", visited)
+    print("auxStack: ", auxStack)
     print("actions: ", actions)
 
     return actions                                  # the method return must be a list of actions for the pacman

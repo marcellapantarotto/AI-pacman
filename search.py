@@ -119,8 +119,8 @@ def depthFirstSearch(problem):
             
             successors = problem.getSuccessors(currentPosition)
 
-        # if (problem.isGoalState(currentPosition)):
-        #     break
+        if (problem.isGoalState(currentPosition)):
+            break
 
         # TODO: implement actions
 
